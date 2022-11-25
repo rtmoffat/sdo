@@ -1,0 +1,11 @@
+extends layout.pug 
+
+block login
+    label(for='username') Username
+    input#username
+    br
+    label(for='password') Password
+    input#password(type="password")
+    br
+    button(onclick='login();') Login
+    p #{myres[0].username}
