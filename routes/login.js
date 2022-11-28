@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const cookieParser = require("cookie-parser");
+router.use(cookieParser());
 
 require('dotenv').config()
 const mariadb = require('mariadb');
@@ -26,5 +28,19 @@ router.get('/r', function(req, res, next) {
     }
     asyncFunction(res);
 });
+
+router.post("/setCookie", (req, res) => {
+    res
+      .writeHead(200, {
+        "Set-Cookie": "token=encryptedstring; HttpOnly",
+        "Access-Control-Allow-Credentials": "true"
+      })
+      .send();
+  });
+  
+  router.get("/private", (req, res) => {
+    if (!req.cookies.token) return res.status(401).send();
+    res.status(200).json({ secret: "Ginger ale is a specific Root Beer" });
+  });
 
 module.exports = router;
