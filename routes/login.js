@@ -10,7 +10,7 @@ const pool = mariadb.createPool({host: process.env.DB_HOST, user: process.env.DB
 
 /* GET users listing. */
 router.get('/r', function(req, res, next) {
-    let q="SELECT * from user;"
+    let q="SELECT * from users;"
     async function asyncFunction(res) {
         try {
             const myRes=await queryDb(q);
@@ -25,6 +25,18 @@ router.get('/r', function(req, res, next) {
 
 router.post("/setCookie", (req, res) => {
     let newToken=md5(req.headers.username);
+    let q='UPDATE users  set apikey=(?) WHERE username=(?)';
+    let v=[newToken,req.headers.username];
+    //let q='UPDATE sdo WHERE username=='+req.headers.username+' set apikey='+newToken+';';
+    async function updateKey(res) {
+      try {
+        const myRes=await queryDb(q,v);
+        console.log(myRes);
+      } finally {
+        console.log('updated key done');
+      }
+    }
+    updateKey(res);
     console.log('hi '+req.headers.username);
     //helper(req.headers.username);
     res
@@ -44,18 +56,18 @@ function helper(uname) {
   console.log('hi'+uname);
 }
 
-async function queryDb(q) {
+async function queryDb(q,v) {
   let conn;
   let res;
   //testing
   //q="SELECT * from users;";
   try {
       conn = await pool.getConnection();
-      const rows = await conn.query(q);
+      const rows = await conn.query(q,v);
       res=rows;
   }
-  catch {
-    res="error";
+  catch(e) {
+    throw e;
   }
   finally {
       if (conn) conn.release(); //release to pool
