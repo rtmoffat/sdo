@@ -1,9 +1,10 @@
 function login() {
-    $username=$('#username')[0].value;
+    var $username=$('#username')[0].value;
     //alert($username);
     var requestOptions = {
         method: 'POST',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers:{'username':$username}
       };
       
       fetch("./setCookie", requestOptions)
