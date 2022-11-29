@@ -10,7 +10,6 @@ const pool = mariadb.createPool({host: process.env.DB_HOST, user: process.env.DB
 
 router.get('/',(req,res,next) => {
     res.render('info',{username:req.cookies.username});
-
 })
 //router.post("/setCookie", (req, res) => {
 module.exports = router;
