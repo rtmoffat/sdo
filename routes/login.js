@@ -39,12 +39,17 @@ router.post("/setCookie", (req, res) => {
     updateKey(res);
     console.log('hi '+req.headers.username);
     //helper(req.headers.username);
-    res
+    /*res
       .writeHead(200, {
         "Set-Cookie": "token="+newToken+"; HttpOnly",
+        "Set-Cookie": "username="+req.headers.username+"; HttpOnly",
         "Access-Control-Allow-Credentials": "true"
       })
-      .send();
+      .send();*/
+    res
+      .cookie('token',newToken,{httpOnly:true,sameSite:'lax',maxAge:900000,path:'/'})
+      .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:900000,path:'/'})
+      .send()
   });
   
   router.get("/private", (req, res) => {
