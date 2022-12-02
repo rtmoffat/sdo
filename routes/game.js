@@ -11,9 +11,9 @@ const pool = mariadb.createPool({host: process.env.DB_HOST, user: process.env.DB
 router.get('/:gameid?',(req,res,next) => {
     //players(names)
     //feeds(ids)
-    var q='select userid,username from players join users on players.userid=users.id where gameid=1;';
+    var q='select userid,username from players join users on players.userid=users.id where gameid=2;';
     querydb(q)
-        .then((value) => {res.render('game',{username:req.cookies.username,gameid:req.params.gameid,res:value,lres:value.length});},
+        .then((value) => {res.render('game',{username:req.cookies.username,gameid:req.params.gameid,"res":value,"lres":value.length});},
         (error) => { console.log(error); });
 })
 
