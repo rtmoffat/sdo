@@ -1,0 +1,13 @@
+extends layout.pug 
+block game
+    p  #{username}
+    p  #{gameid}
+    p  #{res.length}
+    p  #{lres}
+    ul
+        li hi
+        li hello
+        li #{res}
+        //there's currently no way to make the iterator use a value from the javascript. It has to be hard coded with error catching
+        each val in [0,1] 
+            li #{res[val].username}
