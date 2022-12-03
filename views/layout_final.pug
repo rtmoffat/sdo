@@ -1,6 +1,7 @@
 doctype=html 
 html
     include header.pug
+    include game_final.pug
     body
-        include info.pug
-        include feed.pug
+        if username2
+            +list 
