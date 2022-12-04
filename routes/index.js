@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
 /* GET home page. */
 router.get('/test', function(req, res, next) {
-  res.render('layout_final', { title: 'Express2',username1:'myusername' });
+  res.render('layout_final', { title: 'Express2',username2:'myusername' });
 });
 
 module.exports = router;
