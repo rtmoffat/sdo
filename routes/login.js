@@ -47,8 +47,8 @@ router.post("/setCookie", (req, res) => {
       })
       .send();*/
     res
-      .cookie('token',newToken,{httpOnly:true,sameSite:'lax',maxAge:900000,path:'/'})
-      .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:900000,path:'/'})
+      .cookie('token',newToken,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
+      .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
       .send()
   });
   
