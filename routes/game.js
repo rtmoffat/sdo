@@ -6,8 +6,9 @@ var md5 = require('md5');
 
 require('dotenv').config()
 const mariadb = require('mariadb');
-const pool = mariadb.createPool({host: process.env.DB_HOST, port: process.env.DB_PORT,user: process.env.DB_USER, password: process.env.DB_PASS, database: process.env.DB_DATABASE,connectionLimit: 5});
-
+if (process.env.USE_SQLite !=1) {
+    const pool = mariadb.createPool({host: process.env.DB_HOST, port: process.env.DB_PORT,user: process.env.DB_USER, password: process.env.DB_PASS, database: process.env.DB_DATABASE,connectionLimit: 5});
+}
 router.get('/:gameid?',(req,res,next) => {
     //players(names)
     //feeds(ids)
