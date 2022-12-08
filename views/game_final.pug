@@ -1,4 +1,21 @@
-mixin list
+mixin players
+    p players
+    p #{res}
     ul
-        each obj in res
+        each obj in res.players
             li #{obj.username}
+mixin games
+    p games
+    ul
+        each obj in res.games
+            li #{obj.name}
+mixin feeds
+    p feeds
+    ul
+        each obj in res.feeds
+            li #{obj.subject}
+mixin comments(feedid)
+    p comment
+    ul
+        each obj in res.comments
+            li  #{obj.text}

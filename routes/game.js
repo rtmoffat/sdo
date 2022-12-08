@@ -10,13 +10,37 @@ const mariadb = require('mariadb');
 if (process.env.USE_SQLite !=1) {
     const pool = mariadb.createPool({host: process.env.DB_HOST, port: process.env.DB_PORT,user: process.env.DB_USER, password: process.env.DB_PASS, database: process.env.DB_DATABASE,connectionLimit: 5});
 }
-router.get('/:gameid?',(req,res,next) => {
+router.get('/:gameid?',async (req,res,next) => {
+    let topts={};
     //players(names)
     //feeds(ids)
     var q='select userid,username,gameid,name from players join users on users.id=players.id join games on games.id=players.gameid where gameid=1;';
-    queryDb(q)
-        .then((value) => {res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
+    await queryDb(q)
+        .then((value) => {
+          topts['players']=value;},
+          //res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
         (error) => { console.log(error); });
+    var q='select name from games;';
+    await queryDb(q)
+        .then((value) => {
+          topts['games']=value;},
+          //res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
+        (error) => { console.log(error); });
+    var q='select subject from feeds;';
+    await queryDb(q)
+        .then((value) => {
+          topts['feeds']=value;},
+          ///res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
+        (error) => { console.log(error); });
+    var q='select text from comments where feedid=1;';
+    await queryDb(q)
+        .then((value) => {
+          topts['comments']=value;},
+          ///res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
+        (error) => { console.log(error); });
+    console.log("topts=");
+    console.log(topts);
+    res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":topts,"lres":topts.length,"username2":req.cookies.username});
 })
 
 async function queryDb(q,v) {
