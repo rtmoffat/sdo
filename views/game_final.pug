@@ -19,3 +19,18 @@ mixin comments(feedid)
     ul
         each obj in res.comments
             li  #{obj.text}
+mixin menu
+    ul#menu
+        li 
+            div option1 
+        li
+            div option2 
+            ul
+                li 
+                    div suboption1
+                li 
+                    div suboption2 
+        li 
+            div option3
+        li 
+            div option4
