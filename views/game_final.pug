@@ -20,17 +20,24 @@ mixin comments(feedid)
         each obj in res.comments
             li  #{obj.text}
 mixin menu
+    span(class="ui-state-default ui-corner-all")
+        span(class="ui-icon ui-icon-grip-solid-horizontal")
     ul#menu
         li 
-            div option1 
+            div home
         li
-            div option2 
+            div games
             ul
                 li 
-                    div suboption1
+                    div game1
                 li 
-                    div suboption2 
+                    div game2 
         li 
-            div option3
+            div chats
+            ul
+                li 
+                    div chat1
+                li 
+                    div  chat2
         li 
-            div option4
+            div About
