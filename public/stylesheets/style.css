@@ -9,3 +9,5 @@ a {
 .ui-menu {
   width:200px;
 }
+#feed {border:2px double green;width:max-content;}
+#input-commment-container {margin:0 auto;text-align:center;}

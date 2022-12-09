@@ -87,5 +87,22 @@ async function queryDb(q,v) {
 async function querydb2(myq) {
     return await pool.query({sql:myq});
 }
+router.post("/addComment", async (req,res) => {
+  let comment=req.headers.comment;
+  let username=req.cookies.username;
+  let token=req.cookies.token;
+  let uquery="select id from users where username='ralph'";
+  let cquery="insert into comments(userid,text,feedid) values(1,'hi there2',1);";
+  await queryDb(uquery)
+    .then(async (value) => {
+      await queryDb(cquery)
+        .then((value) => {
+          res.send(value);
+        })
+    }),
+    (error) => {
+      res.send(error);
+    }
+  });
 //router.post("/setCookie", (req, res) => {
 module.exports = router;

@@ -20,8 +20,9 @@ mixin comments(feedid)
         each obj in res.comments
             li  #{obj.text}
 mixin menu
-    span(class="ui-state-default ui-corner-all")
-        span(class="ui-icon ui-icon-grip-solid-horizontal")
+    button#menu-button
+        span(class="ui-state-default ui-corner-all")
+            span(class="ui-icon ui-icon-grip-solid-horizontal")
     ul#menu
         li 
             div home
@@ -41,3 +42,11 @@ mixin menu
                     div  chat2
         li 
             div About
+mixin feed
+    div#feed
+        p feed
+        div#comments
+            +comments(1)
+        div#input-comment-container
+            textarea#new-comment
+            button#add-comment(onclick="addComment()") Send

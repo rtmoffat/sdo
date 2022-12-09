@@ -10,5 +10,9 @@ html
             +comments(1)
             +menu
             p creating list
+            +feed
         script. 
             $( "#menu" ).menu();
+            $( "#menu-button" ).click(function() {
+                    $( "#menu" ).toggle( "slide", {direction:"left"}, 300 );
+                });
