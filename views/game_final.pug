@@ -50,3 +50,7 @@ mixin feed
         div#input-comment-container
             textarea#new-comment
             button#add-comment(onclick="addComment()") Send
+mixin chat
+    div#chat
+        p chat
+        button#initChat(onclick="initWebSocket()") Init Socket

@@ -31,3 +31,30 @@ function addComment() {
 /*$( function() {
     $( "#dialog" ).dialog();
   } );*/
+function initWebSocket() {
+          
+  if ("WebSocket" in window) {
+      alert("WebSocket is supported by your Browser!");
+      var ws = new WebSocket("ws://localhost:3001/game/echo");
+
+      ws.onopen = function() {
+        ws.send("Hi server from client!");
+        alert("Message is sent...");
+      };
+
+      ws.onmessage = function (evt) { 
+        var received_msg = evt.data;
+        alert("Message is received...");
+      };
+
+      ws.onclose = function() { 
+        
+        // websocket is closed.
+        alert("Connection is closed..."); 
+      };
+  } else {
+    
+      // The browser doesn't support WebSocket
+      alert("WebSocket NOT supported by your Browser!");
+  }
+}

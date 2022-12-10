@@ -6,6 +6,7 @@ var md5 = require('md5');
 var sql3=require('sqlite3');
 var sqlite=require('sqlite');
 require('dotenv').config()
+
 const mariadb = require('mariadb');
 if (process.env.USE_SQLite !=1) {
     const pool = mariadb.createPool({host: process.env.DB_HOST, port: process.env.DB_PORT,user: process.env.DB_USER, password: process.env.DB_PASS, database: process.env.DB_DATABASE,connectionLimit: 5});
@@ -104,5 +105,26 @@ router.post("/addComment", async (req,res) => {
       res.send(error);
     }
   });
-//router.post("/setCookie", (req, res) => {
+//WebSocket routes for chat rooms
+router.ws('/echo',(ws,req) => {
+  console.log("trying stuff");
+  ws.on('message'),(msg) => {
+    ws.send(msg);
+  }
+})
+
+/*
+//This is how to you send messages to everyone who has established a web socket connection to the server
+//Verify that the user is in the chat room before sending them a message
+var connections = []
+app.ws("/your/ws/path/here", (ws,res)=>{
+    connections.push(ws)
+    //whatever other stuff here, you could also have it be an object storing stuff about the ws that contains it.
+})
+function broadcast(message){
+    connections.forEach((ws)=>{
+        //if the connections are objects with info use something like ws.ws.send()
+        ws.send(message)
+    })
+}*/
 module.exports = router;
