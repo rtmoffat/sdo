@@ -34,23 +34,23 @@ function addComment() {
 function initWebSocket() {
           
   if ("WebSocket" in window) {
-      alert("WebSocket is supported by your Browser!");
+      //alert("WebSocket is supported by your Browser!");
       var ws = new WebSocket("ws://localhost:3001/game/echo");
 
       ws.onopen = function() {
         ws.send("Hi server from client!");
-        alert("Message is sent...");
+        console.log("Message is sent from client");
       };
 
       ws.onmessage = function (evt) { 
         var received_msg = evt.data;
-        alert("Message is received...");
+        console.log("Message is received from server!! "+received_msg);
       };
 
       ws.onclose = function() { 
-        
+        console.log("websocket is closed");
         // websocket is closed.
-        alert("Connection is closed..."); 
+        //alert("Connection is closed..."); 
       };
   } else {
     

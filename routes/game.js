@@ -6,7 +6,7 @@ var md5 = require('md5');
 var sql3=require('sqlite3');
 var sqlite=require('sqlite');
 require('dotenv').config()
-
+var connections={};
 const mariadb = require('mariadb');
 if (process.env.USE_SQLite !=1) {
     const pool = mariadb.createPool({host: process.env.DB_HOST, port: process.env.DB_PORT,user: process.env.DB_USER, password: process.env.DB_PASS, database: process.env.DB_DATABASE,connectionLimit: 5});
@@ -106,12 +106,24 @@ router.post("/addComment", async (req,res) => {
     }
   });
 //WebSocket routes for chat rooms
+
 router.ws('/echo',(ws,req) => {
-  console.log("trying stuff");
-  ws.on('message'),(msg) => {
-    ws.send(msg);
-  }
-})
+  console.log("echoing");
+  console.log(connections);
+  connections[req.cookies.username]=ws;
+  ws.on("message",(msg) => {
+    for (const key in connections) {
+      if (Object.hasOwnProperty.call(connections, key)) {
+        connections[key].send('hello, '+key+Date.now());
+      }
+    }
+  });
+  
+  /*ws.on("message",(msg) => {
+    console.log("Sending it back to client");
+    ws.send('hello '+req.cookies.username+' from the server!');
+  });*/
+});
 
 /*
 //This is how to you send messages to everyone who has established a web socket connection to the server
