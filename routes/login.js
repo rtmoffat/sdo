@@ -16,27 +16,12 @@ if (process.env.USE_SQLite !=1 ) {
 /* GET users listing. */
 router.get('/', function(req, res, next) {
     let q="SELECT * from users;"
-    async function asyncFunction(res) {
-      let myRes;  
-      try {
-            myRes=await queryDb(q);
-            /*
-            if (process.env.USE_SQLite==1) {
-                  await querySQLiteDb(q).then((myRes) => {
-                    res.render('login', { title: 'Login2222', myres:myRes});
-                    console.log("The type ="+typeof(myRes));
-                  })
-                }
-              else {myRes=await queryDb(q);}*/
-        } 
-        catch(e) {console.log(e);}
-        finally {
-          res.render('login', { title: 'Login2222', myres:myRes});
-          console.log("The type ="+typeof(myRes));
-          console.log('done');
-        }
-    }
-    asyncFunction(res);
+    queryDb(q)
+      .then((value) => {
+        res.render('login', { title: 'Login2222', myres:value});
+        console.log('my new db func:')
+        console.log(value);
+      });
 });
 
 router.post("/setCookie", (req, res) => {
@@ -56,23 +41,6 @@ router.post("/setCookie", (req, res) => {
           .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
           .send()
         })
-      /*async function updateKey(res) {
-        try {
-          const myRes=await queryDb(q,v);
-          console.log('myres equals ');
-          console.log(myRes);
-        } 
-        catch(e) {console.log("Error: "+e);}
-        finally {
-          console.log('updated key done');
-        }
-      }
-      updateKey(res);
-      console.log('hi '+req.headers.username);
-      res
-        .cookie('token',newToken,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
-        .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
-        .send()*/
     }
 });
   router.get("/private", (req, res) => {
@@ -125,28 +93,5 @@ async function queryDb(q,v) {
   return res;
 }
 
-//querySQLite for testing
-/*async function querySQLiteDb(q,v) {
-  let res;
-  
-  console.log("trying");
-  try {
-    await sqlite.open({
-      filename: 'test.db',
-      driver: sql3.Database
-    }).then(async function (db)
-      {
-        await db.all('select * from users;')
-          .then((value) =>
-            {
-              console.log("value=");
-              console.log(value);
-              res=value;
-            })
-      });
-  }
-  catch(e) {console.log(e);}
-  return res;
-}*/
 
 module.exports = router;
