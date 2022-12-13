@@ -41,17 +41,25 @@ router.get('/', function(req, res, next) {
 
 router.post("/setCookie", (req, res) => {
     //Check if a token is already set. If so, we don't need to set it again
-    if ('token' in req.headers) {
+    if ('token' in req.headers) { 
       console.log(req.headers.username+' already has a token of '+req.headers.token);
     }
     else {
       let newToken=md5(req.headers.username+process.env.SALT);
-      let q='UPDATE users  set apikey=(?) WHERE username=(?)';
+      let q='UPDATE users set apikey=(?) WHERE username=(?)';
       let v=[newToken,req.headers.username];
       //let q='UPDATE sdo WHERE username=='+req.headers.username+' set apikey='+newToken+';';
-      async function updateKey(res) {
+      queryDb(q,v)
+        .then ((res) => {
+        res
+          .cookie('token',newToken,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
+          .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
+          .send()
+        })
+      /*async function updateKey(res) {
         try {
           const myRes=await queryDb(q,v);
+          console.log('myres equals ');
           console.log(myRes);
         } 
         catch(e) {console.log("Error: "+e);}
@@ -64,7 +72,7 @@ router.post("/setCookie", (req, res) => {
       res
         .cookie('token',newToken,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
         .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
-        .send()
+        .send()*/
     }
 });
   router.get("/private", (req, res) => {
@@ -96,7 +104,7 @@ async function queryDb(q,v) {
     }
   }
   else {
-    console.log("trying");
+    console.log("trying sqlite3 db");
     try {
       await sqlite.open({
         filename: 'test.db',
