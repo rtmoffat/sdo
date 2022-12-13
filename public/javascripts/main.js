@@ -10,6 +10,7 @@ function login() {
       fetch("./setCookie", requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
+        .then(location.href='./game/1')
         .catch(error => console.log('error', error));
     $("#dialog").html($username);
     $( "#dialog" ).dialog();
