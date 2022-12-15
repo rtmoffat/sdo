@@ -12,36 +12,45 @@ if (process.env.USE_SQLite !=1) {
     const pool = mariadb.createPool({host: process.env.DB_HOST, port: process.env.DB_PORT,user: process.env.DB_USER, password: process.env.DB_PASS, database: process.env.DB_DATABASE,connectionLimit: 5});
 }
 router.get('/:gameid?',async (req,res,next) => {
-    let topts={};
-    //players(names)
-    //feeds(ids)
-    var q='select userid,username,gameid,name from players join users on users.id=players.id join games on games.id=players.gameid where gameid=1;';
-    await queryDb(q)
-        .then((value) => {
-          topts['players']=value;},
-          //res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
-        (error) => { console.log(error); });
-    var q='select name from games;';
-    await queryDb(q)
-        .then((value) => {
-          topts['games']=value;},
-          //res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
-        (error) => { console.log(error); });
-    var q='select subject from feeds;';
-    await queryDb(q)
-        .then((value) => {
-          topts['feeds']=value;},
-          ///res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
-        (error) => { console.log(error); });
-    var q='select text from comments where feedid=1;';
-    await queryDb(q)
-        .then((value) => {
-          topts['comments']=value;},
-          ///res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
-        (error) => { console.log(error); });
-    console.log("topts=");
-    console.log(topts);
-    res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":topts,"lres":topts.length,"username2":req.cookies.username});
+    if (await authorized(req)==false)
+    {
+      console.log('unauthorized!!');
+      res.render("login");
+      //res.send('Unauthorized');
+    }
+    else
+    {
+      let topts={};
+      //players(names)
+      //feeds(ids)
+      var q='select userid,username,gameid,name from players join users on users.id=players.id join games on games.id=players.gameid where gameid=1;';
+      await queryDb(q)
+          .then((value) => {
+            topts['players']=value;},
+            //res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
+          (error) => { console.log(error); });
+      var q='select name from games;';
+      await queryDb(q)
+          .then((value) => {
+            topts['games']=value;},
+            //res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
+          (error) => { console.log(error); });
+      var q='select subject from feeds;';
+      await queryDb(q)
+          .then((value) => {
+            topts['feeds']=value;},
+            ///res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
+          (error) => { console.log(error); });
+      var q='select text from comments where feedid=1;';
+      await queryDb(q)
+          .then((value) => {
+            topts['comments']=value;},
+            ///res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":value,"lres":value.length,"username2":req.cookies.username});console.log(value);},
+          (error) => { console.log(error); });
+      console.log("topts=");
+      console.log(topts);
+      res.render('layout_final',{"username":req.cookies.username,"gameid":req.params.gameid,"res":topts,"lres":topts.length,"username2":req.cookies.username});
+    } 
 })
 
 async function queryDb(q,v) {
@@ -71,7 +80,7 @@ async function queryDb(q,v) {
           driver: sql3.Database
         }).then(async function (db)
           {
-            await db.all(q)
+            await db.all(q,v)
               .then((value) =>
                 {
                   console.log("value=");
@@ -139,4 +148,24 @@ function broadcast(message){
         ws.send(message)
     })
 }*/
+async function authorized(req) {
+  let nrows;
+  if (!req.cookies.token || !req.cookies.username) {
+    return false;
+  }
+  var q='select id from users where username=(?) and apikey=(?)';
+  v=[req.cookies.username,req.cookies.token];
+  await queryDb(q,v)
+    .then((res) => {
+        console.log('myval=');
+        console.log(res);
+        nrows=res;
+    });
+  if (nrows.length==0) {
+    console.log('no records found');
+    return false;
+  }
+  console.log('nrows = ');
+  console.log(nrows);
+}
 module.exports = router;

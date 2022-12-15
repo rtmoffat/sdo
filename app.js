@@ -12,6 +12,7 @@ var expressWs = require('express-ws')(app);
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var gameRouter = require('./routes/game');
+var logoutRouter = require('./routes/logout')
 //
 app.set('views','./views');
 app.set('view engine','pug');
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/game',gameRouter);
+app.use('/logout',logoutRouter);
 
 app.listen(3001);
 module.exports = app;

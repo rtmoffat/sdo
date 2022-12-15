@@ -1,19 +1,25 @@
 function login() {
     var $username=$('#username')[0].value;
+    var $password=$('#password')[0].value;
     //alert($username);
     var requestOptions = {
         method: 'POST',
         redirect: 'follow',
-        headers:{'username':$username}
+        headers:{'username':$username,'password':$password}
       };
       
-      fetch("./setCookie", requestOptions)
+      fetch("./login/setCookie", requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
-        .then(location.href='./game/1')
+        //.then(location.href='./game/1')
         .catch(error => console.log('error', error));
     $("#dialog").html($username);
     $( "#dialog" ).dialog();
+}
+function logout() {
+  var $username=$('#username')[0].value;
+  
+  //delete the local cookie
 }
 function addComment() {
   $comment=$('#new-comment')[0].value;

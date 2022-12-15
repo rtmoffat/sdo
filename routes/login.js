@@ -25,9 +25,29 @@ router.get('/', function(req, res, next) {
 });
 
 router.post("/setCookie", (req, res) => {
+    console.log('running setcookie');
     //Check if a token is already set. If so, we don't need to set it again
-    if ('token' in req.headers) { 
-      console.log(req.headers.username+' already has a token of '+req.headers.token);
+    //Check username/password
+    let q='select id from users where username=(?) and password=(?)';
+    //let v=[req.headers.username,req.headers.password+process.env.SALT];
+    let v=[req.headers.username,md5(req.headers.password+process.env.SALT)];
+    console.log(md5(req.headers.password+process.env.SALT));
+    queryDb(q,v)
+      .then((value) => {
+        console.log(value);
+        console.log(req.headers.username);
+        if (value.length==0) {
+          console.log("Username/password invalid");
+          res.send('Username/password invalid!!!');
+        }
+        else {
+          console.log('login successful!');
+          res.send('login successful!!!');
+        }
+      });
+    /*console.log(req.cookies.username);
+    if (req.cookies.username && req.cookies.token) { 
+      console.log(req.cookies.username+' already has a token of '+req.cookies.token);
     }
     else {
       let newToken=md5(req.headers.username+process.env.SALT);
@@ -35,13 +55,13 @@ router.post("/setCookie", (req, res) => {
       let v=[newToken,req.headers.username];
       //let q='UPDATE sdo WHERE username=='+req.headers.username+' set apikey='+newToken+';';
       queryDb(q,v)
-        .then ((res) => {
+        .then ((value) => {
         res
           .cookie('token',newToken,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
           .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
-          .send()
+          .send('login successful!');
         })
-    }
+    }*/
 });
   router.get("/private", (req, res) => {
     if (!req.cookies.token) return res.status(401).send();
@@ -79,7 +99,7 @@ async function queryDb(q,v) {
         driver: sql3.Database
       }).then(async function (db)
         {
-          await db.all(q)
+          await db.all(q,v)
             .then((value) =>
               {
                 console.log("value=");
