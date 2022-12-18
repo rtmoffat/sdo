@@ -1,7 +1,7 @@
 # sdo - Social Deception Online
 This is a self contained environment for creating, playing, and admining social deception games online, such as Werewolf and Blood on the Clocktower. I created this to practice using Node.js and to offer an alternative to platforms such as FB and Discord.
 Technologies used:
-  Nodejs, Express, WebSockets, PUG, SQLite, MariaDb, JavaScript, HTML
+  Nodejs, Express, WebSockets, PUG, SQLite, MariaDb, JavaScript, Jquery, Jquery-UI, HTML
 
 To install:
 Pre-requisites:
