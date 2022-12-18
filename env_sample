@@ -1,0 +1,11 @@
+DB_USER='databseadminuser'
+DB_HOST='ip/hosname of database'
+DB_PASS='databaseadmipassowrd'
+DB_DATABASE='sdo'
+DB_PORT='database port'
+USE_SQLite=1
+SSL_KEY='Path to ssl .key file'
+SSL_CERT='Path to SSL .cert file'
+SSL_CHAIN='Path to SSL .pem file'
+SSL_PORT=SSL_PORT_NUMBER
+SALT='salt for password hash'
