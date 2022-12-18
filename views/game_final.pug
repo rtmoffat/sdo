@@ -1,0 +1,64 @@
+mixin players
+    #players
+        p players
+        p #{res}
+        ul
+            each obj in res.players
+                li #{obj.username}
+mixin games
+    #games
+        p games
+        ul
+            each obj in res.games
+                li #{obj.name}
+mixin feeds
+    #feeds
+        p feeds
+        ul
+            each obj in res.feeds
+                li #{obj.subject}
+mixin comments(feedid)
+    #commentsContainer
+        ul
+            each obj in res.comments
+                li  #{obj.text}
+mixin menu
+    #menuContainer
+        button#menu-button
+            span(class="ui-state-default ui-corner-all")
+                span(class="ui-icon ui-icon-grip-solid-horizontal")
+        ul#menu
+            li 
+                div home
+            li
+                div games
+                ul
+                    li 
+                        div game1
+                    li 
+                        div game2 
+            li 
+                div chats
+                ul
+                    li 
+                        div chat1
+                    li 
+                        div  chat2
+            li
+                div Admin
+            li
+                div Logout
+            li 
+                div About
+mixin feed
+    #feed
+        p #{gameid}
+        div#comments
+            +comments(1)
+        div#input-comment-container
+            textarea#new-comment
+            button#add-comment(onclick="addComment()") Send
+mixin chat
+    #chat
+        p chat
+        button#initChat(onclick="initWebSocket()") Init Socket

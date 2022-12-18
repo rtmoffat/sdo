@@ -1,0 +1,6 @@
+extends layout.pug 
+block game
+    h3 Players
+    ul
+        each obj in res
+            li=obj.username

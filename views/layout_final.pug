@@ -1,0 +1,29 @@
+doctype=html 
+html
+    include header.pug
+    include game_final.pug
+    body
+        +menu
+        #container 
+            if username
+                //+players
+                //+games
+                //+feeds
+                //+comments(1)
+                //p creating list
+                if gameid
+                    +feed
+                +chat
+        script. 
+            $( "#menu" ).menu();
+            $( "#menu" ).toggle( "slide", {direction:"left"}, 300 );
+            $( "#menu-button" ).click(function() {
+                    $( "#menu" ).toggle( "slide", {direction:"left"}, 300 );
+                });
+            $("li.ui-menu-item div").click(function() {
+                console.log(this.innerHTML);
+                if (!this.innerHTML.match('<')) {
+                    $( "#menu" ).toggle( "slide", {direction:"left"}, 300 );
+                    alert('you clicked '+this.innerHTML);
+                }
+            });
