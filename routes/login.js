@@ -42,7 +42,18 @@ router.post("/setCookie", (req, res) => {
         }
         else {
           console.log('login successful!');
-          res.send('login successful!!!');
+          //res.send('login successful!!!');
+          let newToken=md5(req.headers.username+process.env.SALT);
+          let q='UPDATE users set apikey=(?) WHERE username=(?)';
+          let v=[newToken,req.headers.username];
+          //let q='UPDATE sdo WHERE username=='+req.headers.username+' set apikey='+newToken+';';
+          queryDb(q,v)
+            .then ((value) => {
+            res
+              .cookie('token',newToken,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
+              .cookie('username',req.headers.username,{httpOnly:true,sameSite:'lax',maxAge:9000000000,path:'/'})
+              .send('login successful!');
+            });
         }
       });
     /*console.log(req.cookies.username);
